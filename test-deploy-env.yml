@@ -1,0 +1,12 @@
+- name: Apache server installed
+  hosts: node1
+  become: yes
+  tasks:
+    - name: latest version installed
+      yum:
+        name: bash, openssl, openssh-clients, openssh-server
+        state: latest
+    - name: Delete files
+      file:
+        state: absent
+        path: /tmp/

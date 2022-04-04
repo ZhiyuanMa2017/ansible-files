@@ -1,0 +1,21 @@
+- name: Apache server installed
+  hosts: node1
+  become: yes
+  tasks:
+    - name: Install nodejs
+      yum:
+        name: nodejs
+        state: present
+    - name: Install "forever" node.js package
+      community.general.npm:
+        name: forever
+        global: yes
+    - name: Clone the repository
+      git:
+        repo: https://github.com/CSC-DevOps/App
+        dest: /home/App
+        clone: yes
+        update: yes
+    - name: Install packages based on package.json
+      community.general.npm:
+        path: /home/App
