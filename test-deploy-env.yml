@@ -1,12 +1,19 @@
-- name: Apache server installed
+- name: Test Deployment Environment
   hosts: node1
   become: yes
   tasks:
-    - name: latest version installed
+    - name: Latest version installed
       yum:
         name: bash, openssl, openssh-clients, openssh-server
         state: latest
-    - name: Delete files
-      file:
+    - name: Recursively find /tmp files
+      find:
+        paths: /tmp
+        recurse: yes
+      register: filesInTmp
+    - name: Remove all lines
+      ansible.builtin.lineinfile:
+        path: "{{ item.path }}"
         state: absent
-        path: /tmp/
+        regexp: '.*'
+      with_items: "{{ filesInTmp.files }}"

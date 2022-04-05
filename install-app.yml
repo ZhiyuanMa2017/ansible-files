@@ -1,4 +1,4 @@
-- name: Apache server installed
+- name: Install App
   hosts: node1
   become: yes
   tasks:
@@ -7,7 +7,7 @@
         name: nodejs
         state: present
     - name: Install "forever" node.js package
-      community.general.npm:
+      npm:
         name: forever
         global: yes
     - name: Clone the repository
@@ -17,5 +17,5 @@
         clone: yes
         update: yes
     - name: Install packages based on package.json
-      community.general.npm:
+      npm:
         path: /home/App
