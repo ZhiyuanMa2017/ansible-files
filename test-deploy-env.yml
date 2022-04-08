@@ -6,14 +6,14 @@
       yum:
         name: bash, openssl, openssh-clients, openssh-server
         state: latest
-    - name: Recursively find /tmp files
-      find:
-        paths: /tmp
-        recurse: yes
-      register: filesInTmp
-    - name: Remove all lines
-      ansible.builtin.lineinfile:
-        path: "{{ item.path }}"
+    - name: Restart services
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - nginx
+        - sshd
+    - name: Remove content in /tmp
+      file:
+        path: /tmp
         state: absent
-        regexp: '.*'
-      with_items: "{{ filesInTmp.files }}"
